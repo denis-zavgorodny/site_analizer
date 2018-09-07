@@ -1,0 +1,17 @@
+{
+  "name": "site_metrics",
+  "bin": {
+    "siteanalizer": "./index.js"
+  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Denis Zavgorodny",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^1.8.0"
+  }
+}
