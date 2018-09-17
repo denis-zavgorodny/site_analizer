@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const sleep = require('./sleep');
 const puppeteer = require('puppeteer');
 
 const argParams = {};
@@ -15,16 +16,24 @@ process.argv.forEach(function (val, index) {
     if (!url) {
         process.exit(1);
     }
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        timeout: 30000
+    });
     const page = await browser.newPage();
     page.setViewport({
         width: 1280,
         height: 700
     });
-    const response = await page.goto(url);
+    var response;
+    try {
+        page.setDefaultNavigationTimeout(20000);
+        response = await page.goto(url);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
     const responseStatus = response.status();
-    const globalMetrics = await page._client.send('Performance.getMetrics');
-
+    // const globalMetrics = await page._client.send('Performance.getMetrics');
 
     const timing = await page.evaluate(() => {
         const result = {};
@@ -43,7 +52,7 @@ process.argv.forEach(function (val, index) {
     const prepareDOM = Math.abs(timing.domLoading - timing.domInteractive);
     const evaluateInlineJS = Math.abs(timing.domInteractive - timing.domContentLoadedEventEnd);
     const DOMContentLoaded = Math.abs(timing.domainLookupStart - timing.domContentLoadedEventEnd);
-    const pageComplete = Math.abs(timing.domainLookupStart - timing.domComplete);
+    const pageComplete = timing.domComplete ? Math.abs(timing.domainLookupStart - timing.domComplete) : 0;
 
     const res = {
         responseStatus,
