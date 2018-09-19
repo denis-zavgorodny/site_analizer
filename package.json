@@ -12,6 +12,7 @@
   "author": "Denis Zavgorodny",
   "license": "ISC",
   "dependencies": {
+    "log4js": "^3.0.5",
     "puppeteer": "^1.8.0"
   }
 }
