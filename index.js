@@ -11,7 +11,7 @@ log4js.configure(
                     type: 'pattern',
                     pattern: '%d [%p] [PID %z]: %m ',
                 },
-                filename: 'site_metrics.log',
+                filename: './site_metrics.log',
                 compress: true
             },
             out: {
@@ -45,7 +45,10 @@ process.argv.forEach(function (val, index) {
         logger.error('URL no specified');
         return;
     }
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox'],
+        timeout: 10000 // timeout to wait the browser instanse start
+    });
     logger.info(`puppeteer was starting`);
     const page = await browser.newPage();
     logger.info(`chrome was starting`);
@@ -55,7 +58,7 @@ process.argv.forEach(function (val, index) {
     });
     var response;
     try {
-        page.setDefaultNavigationTimeout(1);
+        page.setDefaultNavigationTimeout(10000);
         logger.info(`chrome trying to get the page`);
         response = await page.goto(url);
         logger.info(`chrome got the page successfully`);
