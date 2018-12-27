@@ -83,7 +83,7 @@ process.argv.forEach(function (val, index) {
     await page.setViewport(vewport);
     var response;
     try {
-        page.setDefaultNavigationTimeout(10000);
+        page.setDefaultNavigationTimeout(20000);
         logger.info(`chrome trying to get the page`);
         response = await page.goto(url);
         if (debug === true) {
